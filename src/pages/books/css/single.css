@@ -1,0 +1,52 @@
+.book__title{
+    font-size:26px;
+    color:rgb(71, 67, 67);
+    font-weight:400;
+    letter-spacing:1px;
+    
+}
+.book__details{
+    display:block;
+    margin-top: 20px;
+}
+
+.column__details{
+    display:flex;
+    margin-left:3em;
+    margin-top:1.5em;
+}
+.column__details >h3{
+    font-size :23px;
+    color:rgb(80, 80, 77);
+    font-weight:400;
+
+}
+
+.second__part {
+    margin-left: 20px;
+    font-weight: 300 !important;
+}
+
+.book_held_design{
+    font-size :23px;
+    color:rgb(27, 11, 168);
+    font-weight:400;
+    margin-left: 40px;
+    margin-top: 15px;
+}
+.Title{
+    margin-left: 25px;
+    font-size:26px;
+    color:rgb(243, 26, 26);
+    line-height:20px;
+    margin-top: 40px;
+}
+.Icon__design{
+    color:rgb(225, 238, 42);
+    font-size: 1.7em!important;
+}
+
+.book_issue_list{
+    display:grid;
+    font-size: 20px;
+}
