@@ -12,7 +12,7 @@ const NavigationBar =()=> {
                     <Nav.Link href='/'>Home</Nav.Link>
                     <Nav.Link href="/books">Books</Nav.Link>
                     <Nav.Link href="/members">Members</Nav.Link>
-                    <Nav.Link href="/transactions">Transactions</Nav.Link>
+                    <Nav.Link href="/transaction">Transactions</Nav.Link>
                     <Nav.Link href="/reports">Reports</Nav.Link>
                 </Nav>
             </Navbar.Collapse>
