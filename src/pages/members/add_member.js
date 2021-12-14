@@ -57,9 +57,9 @@ function AddMember(){
                 <Form.Label style={{fontSize:20,marginTop:20}}>Gender</Form.Label>
                 <Form.Select aria-label="Select gender" style={{width:"500px"}} onChange={(e) => setGender(e.target.value)}>
                         <option>Open this select menu</option>
-                        <option value="1">Male</option>
-                        <option value="2">Female</option>
-                        <option value="3">Other</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="other">Other</option>
                 </Form.Select>
                 </Form>
             </Container>
