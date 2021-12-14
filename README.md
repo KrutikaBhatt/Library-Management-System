@@ -1,6 +1,6 @@
 # Library Management System
 
-### View the project deployed [here](https://library-management-system-2.herokuapp.com/)<br>
+### View the project deployed on heroku [here](https://library-management-system-2.herokuapp.com/)<br>
  
 <br>
 This project was built as part of <a href="https://frappe.io/dev-hiring-test">Frappe's Dev Hiring Test</a> .This is a Library Management System which supports:
@@ -50,6 +50,43 @@ npm start
 - The backend can be viewed [here](https://frappebackend.herokuapp.com/books)
 
 ## Screenshots
+1. Homescreen
+<img src="screeshots/homescreen.PNG" alt="Home Page">
+
+2. Manage Books
+<img src="screeshots/manage-books.PNG" alt="Manage Books">
+
+3. Edit Book
+<img src="screeshots/update-book.PNG" alt="Edit Books">
+
+4. View a book
+<img src="screeshots/view-book.PNG" alt="View Books">
+
+5. Manage Members
+
+<img src="screeshots/manage-members.PNG" alt="Manage Member">
+
+6. Add Member
+<img src="screeshots/add-member.PNG" alt="Add Member">
+
+7. Issue a Book
+<img src="screeshots/issue-book.PNG" alt="Issue Books">
+
+8. In case of Debt Exceeding
+<img src="screeshots/debt-exceed.PNG" alt="Debt Exceeds">
+
+10. Return Books
+<img src="screeshots/return.PNG" alt="Return Books">
+
+10. Transaction
+<img src="screeshots/transactions.PNG" alt="Transactions">
+
+11. Report [With Graphs]
+<img src="screeshots/report1.PNG" alt="Report">
+<img src="screeshots/report2.PNG" alt="Report">
+<img src="screeshots/report3.PNG" alt="Report">
+
+
 
 
 
