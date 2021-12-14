@@ -1,5 +1,8 @@
 # Library Management System
 
+### View the project deployed [here](https://library-management-system-2.herokuapp.com/)<br>
+ 
+<br>
 This project was built as part of [Frappe's Dev Hiring Test](https://frappe.io/dev-hiring-test).This is a Library Management System which supports:
 - Basic [CRUD](https://developer.mozilla.org/en-US/docs/Glossary/CRUD) operations on Books and Members.
 - Issue a set of books to a member
@@ -44,6 +47,7 @@ npm install
 npm start
 ```
 - Backend runs on localhost:8080
+- The backend can be viewed [here](https://frappebackend.herokuapp.com/books)
 
 ## Screenshots
 
