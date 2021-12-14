@@ -12,7 +12,7 @@ import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 
 
 const memberDelete = id => {
-    const uri = `http://localhost:8080/members/${id}`;
+    const uri = `https://frappebackend.herokuapp.com/members/${id}`;
     if (window.confirm("The Member will be deleted from library")) {
         axios.delete(uri).then(resp =>{
             console.log(resp.data);
@@ -35,7 +35,7 @@ function SingleMember(){
     const [isLoading, setLoading] = useState(true);
 
     useEffect(() => {
-        let url = `http://localhost:8080/members/${id}`;
+        let url = `https://frappebackend.herokuapp.com/members/${id}`;
         try{
           const make_request = async()=>{
             let result = await fetch(url);

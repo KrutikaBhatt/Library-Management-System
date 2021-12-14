@@ -29,7 +29,7 @@ function ImportBooks() {
             numberOfBooks:numbook
         };
         try {
-            axios.post('http://localhost:8080/books/import',order).then(resp=>{
+            axios.post('https://frappebackend.herokuapp.com/books/import',order).then(resp=>{
                 console.log(resp.data);
                 window.alert("Books imported :\n\n"+resp.data.books);
                 window.location.href='/books';

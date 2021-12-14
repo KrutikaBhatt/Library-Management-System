@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 const memberDelete = id => {
-    const uri = `http://localhost:8080/members/${id}`;
+    const uri = `https://frappebackend.herokuapp.com/members/${id}`;
     if (window.confirm("The Member will be deleted from library")) {
         axios.delete(uri).then(resp =>{
             console.log(resp.data);
@@ -63,7 +63,7 @@ function ManageMembers() {
     const [members,setmember] = useState([]);
    
     useEffect(() => {
-      let url = "http://localhost:8080/members";
+      let url = "https://frappebackend.herokuapp.com/members";
       try{
         const make_request = async()=>{
           let result = await fetch(url);

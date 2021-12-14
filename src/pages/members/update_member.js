@@ -33,7 +33,7 @@ function UpdateMember(){
             debt:debt,
             books:books
         };
-        axios.put(`http://localhost:8080/members/${id}`,member1)
+        axios.put(`https://frappebackend.herokuapp.com/members/${id}`,member1)
         .then(resp =>{
             console.log(resp.data);
             window.alert("Member updated successfully");
@@ -44,7 +44,7 @@ function UpdateMember(){
         })
     }
     useEffect(()=>{
-        let uri =  `http://localhost:8080/members/${id}`;
+        let uri =  `https://frappebackend.herokuapp.com/members/${id}`;
         try {
             const make_request = async()=>{
                 let result = await fetch(uri);

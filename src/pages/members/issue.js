@@ -22,7 +22,7 @@ function IssueBook(){
 
     const IssueBooks=async()=>{
         try {
-            const url=`http://localhost:8080/members/issue/${id}`;
+            const url=`https://frappebackend.herokuapp.com/members/issue/${id}`;
             console.log("UpdateBookID :",updateBookID);
             await axios.post(url,{
                 books:updateBookID
@@ -47,8 +47,8 @@ function IssueBook(){
     }
 
     useEffect(() => {
-        let url = `http://localhost:8080/members/${id}`;
-        let url_books = 'http://localhost:8080/books';;
+        let url = `https://frappebackend.herokuapp.com/members/${id}`;
+        let url_books = 'https://frappebackend.herokuapp.com/books';;
         try{
           const make_request = async()=>{
             let result = await fetch(url);

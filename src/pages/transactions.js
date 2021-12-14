@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
 const downLoadFile= async()=>{
   try {
     axios({
-      url: 'http://localhost:8080/transaction/download',
+      url: 'https://frappebackend.herokuapp.com/transaction/download',
       method: 'GET',
       responseType: 'blob', 
   }).then((response) => {
@@ -64,7 +64,7 @@ function AllTransactions() {
     const [transaction,setTransaction] = useState([]);
    
     useEffect(() => {
-      let url = "http://localhost:8080/transaction";
+      let url = "https://frappebackend.herokuapp.com/transaction";
       try{
         const make_request = async()=>{
           let result = await fetch(url);

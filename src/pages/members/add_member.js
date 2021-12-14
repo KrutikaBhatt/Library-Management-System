@@ -24,7 +24,7 @@ function AddMember(){
             age:age,
             gender:gender,
         };
-        axios.post(`http://localhost:8080/members`,member1)
+        axios.post(`https://frappebackend.herokuapp.com/members`,member1)
         .then(resp =>{
             console.log(resp.data);
             window.alert("Member Added successfully");

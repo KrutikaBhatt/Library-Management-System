@@ -49,9 +49,9 @@ function Reports() {
     const [isLoading, setLoading] = useState(true);
    
     useEffect(() => {
-      let url = "http://localhost:8080/transaction/popular";
-      let uri = "http://localhost:8080/transaction/highest"
-      let chart_url = "http://localhost:8080/transaction/chart";
+      let url = "https://frappebackend.herokuapp.com/transaction/popular";
+      let uri = "https://frappebackend.herokuapp.com/transaction/highest"
+      let chart_url = "https://frappebackend.herokuapp.com/transaction/chart";
 
       try{
         const make_request = async()=>{

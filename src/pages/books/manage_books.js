@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 const BookDelete = id => {
-    const uri = `http://localhost:8080/books/${id}`;
+    const uri = `https://frappebackend.herokuapp.com/books/${id}`;
     if (window.confirm("The Book will be deleted from library")) {
         axios.delete(uri).then(resp =>{
             console.log(resp.data);
@@ -64,7 +64,7 @@ function Manage_Books() {
     const [isLoading, setLoading] = useState(true);
 
     useEffect(() => {
-        let url = "http://localhost:8080/books";
+        let url = "https://frappebackend.herokuapp.com/books";
         try{
           const make_request = async()=>{
             let result = await fetch(url);

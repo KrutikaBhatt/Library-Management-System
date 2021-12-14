@@ -49,7 +49,7 @@ function InsertBook() {
         "times_borrowed" :borrow,
         "ratings_count":numrate,
       };
-      axios.post(`http://localhost:8080/books`, book)
+      axios.post(`https://frappebackend.herokuapp.com/books`, book)
       .then(response => {
         console.log(response.data)
         window.alert("Book Added successfully");

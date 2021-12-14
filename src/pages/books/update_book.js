@@ -37,7 +37,7 @@ function UpdateBook() {
     const [pubdate,setPubDate] = useState("");
 
     useEffect(() => {
-        let url = `http://localhost:8080/books/${id}`;
+        let url = `https://frappebackend.herokuapp.com/books/${id}`;
         try{
           const make_request = async()=>{
             let result = await fetch(url);
@@ -100,7 +100,7 @@ function UpdateBook() {
         "times_borrowed" :borrow,
         "ratings_count":numrate,
       };
-      axios.put(`http://localhost:8080/books/${id}`, book)
+      axios.put(`https://frappebackend.herokuapp.com/books/${id}`, book)
       .then(response => {
         console.log(response.data)
         window.location.href = "/books";
