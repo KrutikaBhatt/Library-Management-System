@@ -62,6 +62,9 @@ npm start
 4. View a book
 <img src="screeshots/view-book.PNG" alt="View Books">
 
+4. Import books from Frappe API
+<img src="screeshots/import.PNG" alt="Import Books">
+
 5. Manage Members
 
 <img src="screeshots/manage-members.PNG" alt="Manage Member">
