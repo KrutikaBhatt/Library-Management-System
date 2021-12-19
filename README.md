@@ -35,18 +35,6 @@ npm start
 ```
 - Open `localhost:3000` in your browser.
 
-
-- Install the Backend dependencies:
-
-```
-cd main_routes
-npm install
-```
-- Start the server:
-```
-npm start
-```
-- Backend runs on localhost:8080
 - The backend can be viewed [here](https://frappebackend.herokuapp.com/books)
 
 ## Screenshots
