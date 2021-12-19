@@ -1,10 +1,14 @@
-from flask import Flask, request, json, Response,jsonify
-import database
+from flask import Flask, request, json, Response,jsonify,send_file
+from database import *
 from pymongo import MongoClient
-
+from books import book
+from member import Member
+from transactions import Transaction
+import requests, datetime
+import csv
 
 app = Flask(__name__)
-
+db = get_db()
 
 @app.route('/')
 def welcome_route():
@@ -15,12 +19,13 @@ def welcome_route():
 # Members route API begins here
 @app.route('/members',methods=['GET'])
 def get_members():
-    print("Hello")
-    resp = database.member_collection.find()
-    print(list(resp))
+    try:
+        print("Hello")
+        resp = Member.objects()
 
-    return Response(response=json.dumps(list(response)), status=200,
-                    mimetype='application/json')
+        return Response(response=resp, status=200,mimetype='application/json')
+    except :
+        return Response(response=jsonify({"error":"An error occurred.Please try again"}), status=500,mimetype='application/json')
 
 
 @app.route('/members',methods=['POST'])
@@ -30,37 +35,227 @@ def add_member():
         return Response(response=json.dumps({"Error": "Please provide complete information"}),
                         status=400, mimetype='application/json')
 
-    response = member_collection.insert_one(data)
-    return Response(response=json.dumps({"Success":"Member have been added successfully!","response":response}), status=200,mimetype='application/json')
+    member = Member(data)
+    member.save()
+
+    return Response(response=json.dumps({"Success":"Member have been added successfully!","response":jsonify(member.to_json())}), status=200,mimetype='application/json')
 
 
-@app.route('/members', methods=['PUT'])     
+@app.route('/members/<string:id>', methods=['PUT'])     
 def update_member():
-    data = request.json
-    if data is None or data == {} or 'ID' not in data:
-        return Response(response=json.dumps({"Error": "Please provide complete information"}),
-                        status=400, mimetype='application/json')
+    try:
+        data = request.json
+        if data is None or data == {} or id is None:
+            return Response(response=json.dumps({"Error": "Please provide complete information"}),
+                            status=400, mimetype='application/json')
+        
+        member = Member.objects({'_id':db.ObjectId(id)}).first()
+        if not member:
+            return Response(response=jsonify({'error': 'Member not found'}), status=200,mimetype='application/json')
+        else:
+            member.update({'_id':db.ObjectId(id)})
+            return Response(response=json.dumps({"Success":"Member have been updated successfully!"}), status=200,mimetype='application/json')
 
-    response = member_collection.update_one({'_id':ObjectId(data)},{'$set':data})
-    
-    if response.modified_count>0:
-        return Response(response=json.dumps({"Success":"Member have been updated successfully!","response":response}), status=200,mimetype='application/json')
-
-    else:
-        return Response(response=json.dumps({"Success":"There was an unexpecte error. Cannot update!","response":response}), status=200,mimetype='application/json')
+    except:
+        return Response(response=json.dumps({"Success":"There was an unexpected error. Cannot update!"}), status=500,mimetype='application/json')
+        
 
 
-@app.route('/members', methods=['DELETE'])   
+@app.route('/members/<string:id>', methods=['DELETE'])   
 def delete():
-    data = request.json
-    if data is None or data == {} or 'ID' not in data:
-        return Response(response=json.dumps({"Error": "Please provide complete information"}),
-                        status=400, mimetype='application/json')
+    try:
+        data = request.json
+        if data is None or data == {} or id is None:
+            return Response(response=json.dumps({"Error": "Please provide complete information"}),
+                            status=400, mimetype='application/json')
 
-    response = member_collection.delete_one({'_id':ObjectId(data['ID'])})
+        member = Member.objects({'_id':db.ObjectId(id)}).first()
+        if not member:
+            return jsonify({'error': 'data not found'})
+        else:
+            member.delete()
+            return Response(response=json.dumps("Member deleted successfully"), status=200,mimetype='application/json')
+        
+    except:
+        return Response(response=jsonify({"error":"Unexpected error occurred"}), status=500,mimetype='application/json')
 
-    return Response(response=json.dumps("Member deleted successfully"), status=200,
-                    mimetype='application/json')
+
+@app.route('/member/<string:id>', methods=['GET'])   
+def get_single_member():
+    try:
+        
+        member = Member.objects({'_id':db.ObjectId(id)}).first()
+        if not member:
+            return jsonify({'error': 'data not found'})
+        else:
+            return Response(response=jsonify(member), status=200,mimetype='application/json')
+    except:
+        return Response(response=jsonify({"error":"Unexpected error occurred"}), status=500,mimetype='application/json')
+
+
+# Books CRUD route API begins here
+@app.route('/books',methods=['GET'])
+def get_books():
+    try:
+        resp = book.objects()
+
+        return Response(response=jsonify(resp), status=200,mimetype='application/json')
+    except :
+        return Response(response=jsonify({"error":"An error occurred.Please try again"}), status=500,mimetype='application/json')
+
+
+@app.route('/books',methods=['POST'])
+def add_books():
+    try:
+        data = request.json
+        if data is None or data == {}:
+            return Response(response=json.dumps({"Error": "Please provide complete information"}),
+                            status=400, mimetype='application/json')
+
+        book1 = book(data)
+        book1.save()
+
+        return Response(response=json.dumps({"Success":"Books have been added successfully!","response":jsonify(book1)}), status=200,mimetype='application/json')
+    except:
+        return Response(response=json.dumps({"Error":"Unexpected error occurred"}), status=500,mimetype='application/json')
+
+@app.route('/book/<string:id>', methods=['PUT'])     
+def update_book():
+    try:
+        data = request.json
+        if data is None or data == {} or id is None:
+            return Response(response=json.dumps({"Error": "Please provide complete information"}),
+                            status=400, mimetype='application/json')
+        
+        book1 = book.objects({'_id':db.ObjectId(id)}).first()
+        if not book1:
+            return Response(response=jsonify({'error': 'Book not found'}), status=200,mimetype='application/json')
+        else:
+            book1.update({'_id':db.ObjectId(id)})
+            return Response(response=json.dumps({"Success":"Book have been updated successfully!"}), status=200,mimetype='application/json')
+
+    except:
+        return Response(response=json.dumps({"Success":"There was an unexpected error. Cannot update!"}), status=500,mimetype='application/json')
+        
+
+
+@app.route('/book/<string:id>', methods=['DELETE'])   
+def delete_book():
+    try:
+        data = request.json
+        if data is None or data == {} or id is None:
+            return Response(response=json.dumps({"Error": "Please provide complete information"}),
+                            status=400, mimetype='application/json')
+
+        book1 = book.objects({'_id':db.ObjectId(id)}).first()
+        if not book1:
+            return jsonify({'error': 'data not found'})
+        else:
+            book1.delete()
+            return Response(response=json.dumps("Book deleted successfully"), status=200,mimetype='application/json')
+        
+    except:
+        return Response(response=jsonify({"error":"Unexpected error occurred"}), status=500,mimetype='application/json')
+
+
+@app.route('/book/<string:id>', methods=['GET'])   
+def get_single_book():
+    try:
+        book1 = book.objects({'_id':db.ObjectId(id)}).first()
+        if not book1:
+            return jsonify({'error': 'data not found'})
+        else:
+            return Response(response=jsonify(book1), status=200,mimetype='application/json')
+    except:
+        return Response(response=jsonify({"error":"Unexpected error occurred"}), status=500,mimetype='application/json')
+
+
+@app.route('/import',methods=['POST'])
+async def import_books():
+    try:          
+        response = requests.get("https://frappe.io/api/method/frappe-library")
+        raw_data = response.json()
+        titles = []
+        data = []
+
+        for value in raw_data.values():
+            for x in value:
+                data.append(x)
+                book1 = await book(x)
+                book1.save()
+
+        for title in data:
+            titles.append(title)
+
+        return Response(response=jsonify({"response":"Books imported successfully"}), status=200,mimetype='application/json')
+        
+    except :
+        return Response(response=jsonify({"error":"Some unexpected error occurred"}), status=500,mimetype='application/json')
+
+
+
+# Transaction route API begins here
+@app.route('/transactions',methods=['GET'])
+def get_transactions():
+    try:
+        resp = Transaction.objects()
+
+        return Response(response=resp, status=200,mimetype='application/json')
+    except :
+        return Response(response=jsonify({"error":"An error occurred.Please try again"}), status=500,mimetype='application/json')
+
+   
+
+
+# Report route API begins here
+@app.route('/reports/popular',methods=['GET'])
+async def get_popular_books():
+    try:
+        sort_function = {"times_borrowed":-1}
+        books = await book.find({}).sort(sort_function)
+
+        return Response(response=jsonify(books), status=200,mimetype='application/json')
+    except :
+        return Response(response=jsonify({"error":"An error occurred.Please try again"}), status=500,mimetype='application/json')
+
+
+@app.route('/report/highest',methods=['GET'])
+async def get_highest_paying():
+    try:
+        sort_function = {"total_amount_paid":-1}
+        result = await Member.find({}).sort(sort_function)
+
+        return Response(response=jsonify(result), status=200,mimetype='application/json')
+    except :
+        return Response(response=jsonify({"error":"An error occurred.Please try again"}), status=500,mimetype='application/json')
+
+
+# Download CSV transactions
+
+@app.route('/transaction/download',methods=['POST'])
+async def download():
+    try:
+        resp = Transaction.find({})
+        row_list = [["ID","Member","Book","Message","Type","Date"]]
+        for value in resp:
+            id = value._id
+            member = value.member.name
+            book = value.book.title
+            message = value.message
+            type1 = value.type1
+            date = value.created_at
+
+            row_list.append([id,member,book,message,type1,date])
+        
+        with open('Transactions.csv', 'w', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerows(row_list)
+        
+        return send_file('Transactions.csv',mimetype='text/csv',attachment_filename='Transactions.csv',as_attachment=True)
+        
+    except :
+        return Response(response=jsonify({"error":"An error occurred.Please try again"}), status=500,mimetype='application/json')
+
 
 
 if __name__ == '__main__':
