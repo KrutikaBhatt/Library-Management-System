@@ -29,14 +29,21 @@ def get_members():
 
 
 @app.route('/members',methods=['POST'])
-def add_member():
+async def add_member():
     data = request.json
     if data is None or data == {}:
         return Response(response=json.dumps({"Error": "Please provide complete information"}),
                         status=400, mimetype='application/json')
 
     member = Member(data)
-    member.save()
+    await member.save()
+
+    transaction = Transaction({
+        'type1':'add',
+        'member':member._id,
+        'message':'Member'+member.name+" was added to the library"
+    })
+    await transaction.save()
 
     return Response(response=json.dumps({"Success":"Member have been added successfully!","response":jsonify(member.to_json())}), status=200,mimetype='application/json')
 
@@ -82,8 +89,7 @@ def delete():
 
 @app.route('/member/<string:id>', methods=['GET'])   
 def get_single_member():
-    try:
-        
+    try:   
         member = Member.objects({'_id':db.ObjectId(id)}).first()
         if not member:
             return jsonify({'error': 'data not found'})
@@ -92,6 +98,60 @@ def get_single_member():
     except:
         return Response(response=jsonify({"error":"Unexpected error occurred"}), status=500,mimetype='application/json')
 
+
+@app.route('/member/issue/<string:id>', methods=['POST'])
+async def issue_book():
+    try:
+        books_list = request.books.json
+        member = Member.objects({'_id':db.ObjectId(id)}).first()
+
+        print(books_list)
+        print(member)
+        for i in range(books_list.length):
+            book = await book.objects({'_id':db.ObjectId(id)}).first()
+            member.books.append(book)
+            book.quantity_in_library =  book.quantity_in_library-1
+            book.times_borrowed = book.times_borrowed + 1
+            await book.save()
+        
+        await member.save()
+        transaction = Transaction({
+        'type1':'issue',
+        'member':member._id,
+        'message':'Member'+member.name+" was issues books"
+        })
+        await transaction.save()
+
+        return Response(response=jsonify({"message":"Books issued successfully"}), status=200,mimetype='application/json')
+    
+    except:
+        return Response(response=jsonify({"error":"Unexpected error occurred"}), status=500,mimetype='application/json')
+
+
+@app.route('/member/return/<string:id>', methods=['POST'])
+async def return_book():
+    try:
+        books_list = request.books.json
+        member = Member.objects({'_id':db.ObjectId(id)}).first()
+
+        for i in range(books_list.length):
+            book = await book.objects({'_id':db.ObjectId(id)}).first()
+            member.books.remove(book)
+            book.quantity_in_library =  book.quantity_in_library+1
+            await book.save()
+            member.debt+=book.rent
+        
+        await member.save()
+        transaction = Transaction({
+        'type1':'return',
+        'member':member._id,
+        'message':'Member'+member.name+" returned "+books_list.length
+        })
+        await transaction.save()
+
+        return Response(response=jsonify({"message":"Books returned successfully"}), status=200,mimetype='application/json')
+    except:
+        return Response(response=jsonify({"error":"Unexpected error occurred"}), status=500,mimetype='application/json')
 
 # Books CRUD route API begins here
 @app.route('/books',methods=['GET'])
@@ -105,7 +165,7 @@ def get_books():
 
 
 @app.route('/books',methods=['POST'])
-def add_books():
+async def add_books():
     try:
         data = request.json
         if data is None or data == {}:
@@ -115,6 +175,12 @@ def add_books():
         book1 = book(data)
         book1.save()
 
+        transaction = Transaction({
+        'type1':'add',
+        'book':book._id,
+        'message':'Book'+member.name+" was added in library "
+        })
+        await transaction.save()
         return Response(response=json.dumps({"Success":"Books have been added successfully!","response":jsonify(book1)}), status=200,mimetype='application/json')
     except:
         return Response(response=json.dumps({"Error":"Unexpected error occurred"}), status=500,mimetype='application/json')
@@ -186,6 +252,12 @@ async def import_books():
 
         for title in data:
             titles.append(title)
+        
+        transaction = Transaction({
+        'type1':'import',
+        'message':'Books imported from Frappe server'
+        })
+        await transaction.save()
 
         return Response(response=jsonify({"response":"Books imported successfully"}), status=200,mimetype='application/json')
         

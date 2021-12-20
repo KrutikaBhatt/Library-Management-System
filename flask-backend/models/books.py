@@ -1,4 +1,4 @@
-from database import *
+from ..database import *
 from datetime import datetime
 
 db = get_db()
